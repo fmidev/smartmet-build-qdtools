@@ -1,0 +1,91 @@
+version: 2
+jobs:
+  smartmet-library-newbase:
+    machine: true
+    steps:
+      - run:
+          name: Build
+	  command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+  smartmet-library-imagine:
+    machine: true
+    steps:
+      - run:
+          name: Build
+	  command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+  smartmet-library-macgyver:
+    machine: true
+    steps:
+      - run:
+          name: Build
+	  command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+  smartmet-library-smarttools:
+    machine: true
+    steps:
+      - run:
+          name: Build
+	  command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+  smartmet-library-calculator:
+    machine: true
+    steps:
+      - run:
+          name: Build
+	  command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+  smartmet-library-gis:
+    machine: true
+    steps:
+      - run:
+          name: Build
+	  command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+  smartmet-library-spine:
+    machine: true
+    steps:
+      - run:
+          name: Build
+	  command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+  smartmet-library-qdtools:
+    machine: true
+    steps:
+      - run:
+          name: Build
+	  command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+  smartmet-library-qdtools:
+    machine: true
+    steps:
+      - run:
+          name: Deploy
+	  command: echo Deploy
+
+
+workflows:
+  version: 2
+  build-smartmet-qdtools:
+    jobs:
+      - smartmet-library-newbase
+      - smartmet-library-imagine
+      - smartmet-library-macgyver:
+          requires:
+            - smartmet-library-newbase
+      - smartmet-library-smarttools:
+          requires:
+            - smartmet-library-newbase
+      - smartmet-library-calculator:
+          requires:
+            - smartmet-library-macgyver
+      - smartmet-library-gis:
+          requires:
+            - smartmet-library-macgyver
+      - smartmet-library-spine:
+          requires:
+            - smartmet-library-gis
+      - smartmet-qdtools:
+      	  requires:
+	    - smartmet-library-newbase
+	    - smartmet-library-imagine
+	    - smartmet-library-macgyver
+	    - smartmet-library-smarttools
+	    - smartmet-library-calculator
+	    - smartmet-library-gis
+	    - smartmet-library-spine
+      - deploy:
+          requires:
+            - smartmet-qdtools
