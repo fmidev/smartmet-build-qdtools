@@ -78,7 +78,7 @@ workflows:
           requires:
             - smartmet-library-gis
       - smartmet-qdtools:
-      	  requires:
+          requires:
             - smartmet-library-newbase
             - smartmet-library-imagine
             - smartmet-library-macgyver
@@ -89,3 +89,4 @@ workflows:
       - deploy:
           requires:
             - smartmet-qdtools
+
