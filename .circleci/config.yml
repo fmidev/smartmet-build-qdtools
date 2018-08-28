@@ -79,13 +79,13 @@ workflows:
             - smartmet-library-gis
       - smartmet-qdtools:
       	  requires:
-	    - smartmet-library-newbase
-	    - smartmet-library-imagine
-	    - smartmet-library-macgyver
-	    - smartmet-library-smarttools
-	    - smartmet-library-calculator
-	    - smartmet-library-gis
-	    - smartmet-library-spine
+            - smartmet-library-newbase
+            - smartmet-library-imagine
+            - smartmet-library-macgyver
+            - smartmet-library-smarttools
+            - smartmet-library-calculator
+            - smartmet-library-gis
+            - smartmet-library-spine
       - deploy:
           requires:
             - smartmet-qdtools
