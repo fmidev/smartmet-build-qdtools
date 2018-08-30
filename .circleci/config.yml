@@ -13,8 +13,8 @@ jobs:
     machine: true
     steps:
       - run: mkdir -p RPMS
-      - run: chgrp -R 0 RPMS
-      - run: chmod -R g=u RPMS
+      - run: sudo chgrp -R 0 RPMS
+      - run: sudo chmod -R g=u RPMS
       - run: ls -la
       - persist_to_workspace:
           root: RPMS
