@@ -1,15 +1,3 @@
-defaults: &defaults
-    machine: true
-    steps:
-      - attach_workspace:
-          at: RPMS
-      - run: |
-          sudo chgrp -R 0 RPMS
-          sudo chmod -R g=u RPMS
-          ls -lR
-      - run: docker run -u rpmbuild:0 -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
-      - run: ls -lR RPMS
-
 aliases:
   - &attach_workspace
       at: RPMS
@@ -29,7 +17,8 @@ jobs:
       - image: fmidev/rpmbuild:el7
         entrypoint: bash
     steps:
-      - run:
+      - add_ssh_keys
+      - deploy:
           name: Firebase Deploy
           command: |
             mkdir -p RPMS
@@ -37,6 +26,7 @@ jobs:
             echo OK > index.html
             echo '{"hosting":{"public":"."}}' > firebase.json
             firebase deploy --project download-smartmet --token "$FIREBASE_TOKEN"
+            rsync -av -e ssh . fmi@cumulus.meteo.fi:RPMS/
   prepare:
     machine: true
     steps:
