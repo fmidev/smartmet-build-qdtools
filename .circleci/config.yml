@@ -3,7 +3,7 @@ defaults: &defaults
     steps:
       - attach_workspace:
           at: RPMS
-      - run: docker run -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+      - run: docker run -u circleci:0 -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
       - persist_to_workspace:
           root: RPMS
 
@@ -23,21 +23,9 @@ jobs:
   smartmet-library-newbase:
     <<: *defaults
   smartmet-library-imagine:
-    machine: true
-    steps:
-      - attach_workspace:
-          at: RPMS
-      - run: docker run -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
-      - persist_to_workspace:
-          root: RPMS
+    <<: *defaults
   smartmet-library-macgyver:
-    machine: true
-    steps:
-      - attach_workspace:
-          at: RPMS
-      - run: docker run -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
-      - persist_to_workspace:
-          root: RPMS
+    <<: *defaults
   smartmet-library-smarttools:
     <<: *defaults
   smartmet-library-calculator:
