@@ -3,7 +3,7 @@ defaults: &defaults
     steps:
       - attach_workspace:
           at: RPMS
-      - run: docker run -u $UID:0 -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+      - run: docker run -u rpmbuild:0 -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
       - persist_to_workspace:
           root: RPMS
 
