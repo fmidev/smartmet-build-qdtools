@@ -15,9 +15,10 @@ jobs:
       - run: mkdir -p RPMS
       - run: chmod 2775 RPMS
       - run: chmod a+rwx RPMS
-      - run: echo README > RPMS/README
       - persist_to_workspace:
           root: RPMS
+          paths: .
+
   smartmet-library-newbase:
     <<: *defaults
   smartmet-library-imagine:
