@@ -10,12 +10,12 @@ defaults: &defaults
       - run: docker run -u rpmbuild:0 -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
       - run: ls -lR RPMS
 
-attach: &attach
-  - attach_workspace:
+aliases:
+  - &attach_workspace
       at: RPMS
 
-run: &run
-  - run: |
+  - &run
+    |
       sudo chgrp -R 0 RPMS
       sudo chmod -R g=u RPMS
       ls -lR
@@ -40,64 +40,64 @@ jobs:
   smartmet-library-newbase:
     machine: true
     steps:
-      - *attach
-      - *run
+      - attach_workspace: *attach_workspace
+      - run: *run
       - persist_to_workspace:
           root: RPMS
           paths: x86_64/smartmet-library-newbase*
   smartmet-library-imagine:
     machine: true
     steps:
-      - *attach
-      - *run
+      - attach_workspace: *attach_workspace
+      - run: *run
       - persist_to_workspace:
           root: RPMS
           paths: x86_64/smartmet-library-imagine*
   smartmet-library-macgyver:
     machine: true
     steps:
-      - *attach
-      - *run
+      - attach_workspace: *attach_workspace
+      - run: *run
       - persist_to_workspace:
           root: RPMS
           paths: x86_64/smartmet-library-macgyver*
   smartmet-library-smarttools:
     machine: true
     steps:
-      - *attach
-      - *run
+      - attach_workspace: *attach_workspace
+      - run: *run
       - persist_to_workspace:
           root: RPMS
           paths: x86_64/smartmet-library-smarttools*
   smartmet-library-calculator:
     machine: true
     steps:
-      - *attach
-      - *run
+      - attach_workspace: *attach_workspace
+      - run: *run
       - persist_to_workspace:
           root: RPMS
           paths: x86_64/smartmet-library-calculator*
   smartmet-library-gis:
     machine: true
     steps:
-      - *attach
-      - *run
+      - attach_workspace: *attach_workspace
+      - run: *run
       - persist_to_workspace:
           root: RPMS
           paths: x86_64/smartmet-library-gis*
   smartmet-library-spine:
     machine: true
     steps:
-      - *attach
-      - *run
+      - attach_workspace: *attach_workspace
+      - run: *run
       - persist_to_workspace:
           root: RPMS
           paths: x86_64/smartmet-library-spine*
   smartmet-qdtools:
     machine: true
     steps:
-      - *attach
-      - *run
+      - attach_workspace: *attach_workspace
+      - run: *run
       - persist_to_workspace:
           root: RPMS
           paths: x86_64/smartmet-qdtools*
