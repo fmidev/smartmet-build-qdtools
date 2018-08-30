@@ -10,7 +10,7 @@ defaults: &defaults
       - run: docker run -u rpmbuild:0 -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
       - persist_to_workspace:
           root: RPMS
-          paths: .
+          paths: x86_64/$CIRCLE_JOB*.rpm
 
 version: 2
 jobs:
