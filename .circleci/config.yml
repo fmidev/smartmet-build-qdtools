@@ -19,6 +19,7 @@ jobs:
   prepare:
     machine: true
     steps:
+      - run: echo "x86_64/$CIRCLE_JOB*"
       - run: mkdir -p RPMS
       - run: sudo chgrp -R 0 RPMS
       - run: sudo chmod -R g=u RPMS
