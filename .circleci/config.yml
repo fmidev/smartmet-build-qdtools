@@ -24,6 +24,18 @@ aliases:
 
 version: 2
 jobs:
+  deploytest:
+    docker:
+      - image: fmidev/rpmbuild:el7
+        entrypoint: bash
+      - run:
+          name: Firebase Deploy
+          command: |
+            mkdir -p RPMS
+            cd RPMS
+            echo OK > index.html
+            echo '{"hosting":{"public":"."}}' > firebase.json
+            firebase deploy --project download-smartmet --token "$FIREBASE_TOKEN"
   prepare:
     machine: true
     steps:
@@ -124,6 +136,7 @@ workflows:
   version: 2
   build-smartmet-qdtools:
     jobs:
+      - deploytest
       - prepare
       - smartmet-library-newbase:
           requires:
