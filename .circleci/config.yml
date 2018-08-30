@@ -9,14 +9,16 @@ defaults: &defaults
 
 version: 2
 jobs:
-  smartmet-library-newbase:
+  prepare:
     machine: true
     steps:
       - run: mkdir -p RPMS
+      - run: chmod 2775
       - run: chmod a+rwx RPMS
-      - run: docker run -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
       - persist_to_workspace:
           root: RPMS
+  smartmet-library-newbase:
+    <<: *defaults
   smartmet-library-imagine:
     machine: true
     steps:
@@ -67,8 +69,12 @@ workflows:
   version: 2
   build-smartmet-qdtools:
     jobs:
-      - smartmet-library-newbase
-      - smartmet-library-imagine
+      - smartmet-library-newbase:
+          requires:
+            - prepare
+      - smartmet-library-imagine:
+          requires:
+            - prepare
       - smartmet-library-macgyver:
           requires:
             - smartmet-library-newbase
