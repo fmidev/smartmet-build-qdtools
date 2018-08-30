@@ -28,6 +28,7 @@ jobs:
     docker:
       - image: fmidev/rpmbuild:el7
         entrypoint: bash
+    steps:
       - run:
           name: Firebase Deploy
           command: |
@@ -138,6 +139,8 @@ workflows:
     jobs:
       - deploytest
       - prepare
+          requires:
+            - deploytest
       - smartmet-library-newbase:
           requires:
             - prepare
