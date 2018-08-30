@@ -1,35 +1,42 @@
+defaults: &defaults
+    machine: true
+    steps:
+      - attach_workspace:
+          at: RPMS
+      - run: docker run -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+      - persist_to_workspace:
+          root: RPMS
+
 version: 2
 jobs:
   smartmet-library-newbase:
     machine: true
     steps:
-      - run:
-          name: Build
-          command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+      - run: mkdir -p RPMS
+      - run: chmod a+rwx RPMS
+      - run: docker run -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+      - persist_to_workspace:
+          root: RPMS
   smartmet-library-imagine:
     machine: true
     steps:
-      - run:
-          name: Build
-          command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+      - attach_workspace:
+          at: RPMS
+      - run: docker run -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+      - persist_to_workspace:
+          root: RPMS
   smartmet-library-macgyver:
     machine: true
     steps:
-      - run:
-          name: Build
-          command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+      - attach_workspace:
+          at: RPMS
+      - run: docker run -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+      - persist_to_workspace:
+          root: RPMS
   smartmet-library-smarttools:
-    machine: true
-    steps:
-      - run:
-          name: Build
-          command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+    <<: *defaults
   smartmet-library-calculator:
-    machine: true
-    steps:
-      - run:
-          name: Build
-          command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+    <<: *defaults
   smartmet-library-gis:
     machine: true
     steps:
@@ -42,13 +49,13 @@ jobs:
       - run:
           name: Build
           command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
-  smartmet-library-qdtools:
+  smartmet-qdtools:
     machine: true
     steps:
       - run:
           name: Build
           command: docker run -h rpmbuild-el7.fmi.fi --rm fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
-  smartmet-library-qdtools:
+  deploy:
     machine: true
     steps:
       - run:
