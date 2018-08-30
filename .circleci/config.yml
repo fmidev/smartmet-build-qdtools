@@ -7,14 +7,20 @@ defaults: &defaults
       - persist_to_workspace:
           root: RPMS
 
+RUN mkdir -p $GEOSERVER_HOME && \
+    chgrp -R 0 $GEOSERVER_HOME && \
+    chmod -R g=u $GEOSERVER_HOME /etc/passwd /var/log
+
+
 version: 2
 jobs:
   prepare:
     machine: true
     steps:
       - run: mkdir -p RPMS
-      - run: chmod 2775 RPMS
-      - run: chmod a+rwx RPMS
+      - run: chgrp -R 0 RPMS
+      - run: chmod -R g=u RPMS
+      - run: ls -la
       - persist_to_workspace:
           root: RPMS
           paths: .
