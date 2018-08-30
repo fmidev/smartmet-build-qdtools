@@ -6,13 +6,11 @@ defaults: &defaults
       - run: |
           sudo chgrp -R 0 RPMS
           sudo chmod -R g=u RPMS
-          ls -la 
+          ls -lR
       - run: docker run -u rpmbuild:0 -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
-      - run: find RPMS
-      - run: echo x86_64/${CIRCLE_JOB}*
+      - run: ls -lR RPMS
       - persist_to_workspace:
           root: RPMS
-          paths: x86_64/${CIRCLE_JOB}*
 
 version: 2
 jobs:
@@ -31,6 +29,7 @@ jobs:
 
   smartmet-library-newbase:
     <<: *defaults
+          paths: x86_64/smartmet-library-newbase*
   smartmet-library-imagine:
     <<: *defaults
   smartmet-library-macgyver:
