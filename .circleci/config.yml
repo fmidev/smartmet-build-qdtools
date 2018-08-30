@@ -28,7 +28,7 @@ jobs:
   prepare:
     machine: true
     steps:
-      - run: mkdir -p RPMS
+      - run: mkdir -p RPMS/x86_64
       - run: sudo chgrp -R 0 RPMS
       - run: sudo chmod -R g=u RPMS
       - run: ls -la
