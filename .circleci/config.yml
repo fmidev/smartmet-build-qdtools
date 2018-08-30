@@ -7,11 +7,6 @@ defaults: &defaults
       - persist_to_workspace:
           root: RPMS
 
-RUN mkdir -p $GEOSERVER_HOME && \
-    chgrp -R 0 $GEOSERVER_HOME && \
-    chmod -R g=u $GEOSERVER_HOME /etc/passwd /var/log
-
-
 version: 2
 jobs:
   prepare:
