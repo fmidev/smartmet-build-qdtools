@@ -12,26 +12,22 @@ aliases:
 
 version: 2
 jobs:
-  deploytest:
+  deployfirebase:
     docker:
       - image: fmidev/rpmbuild:el7
         entrypoint: bash
     steps:
-      - add_ssh_keys
+      - attach_workspace: *attach_workspace
       - deploy:
           name: Firebase Deploy
           command: |
-            mkdir -p RPMS
+            createrepo RPMS/x86_64
             cd RPMS
-            echo OK > index.html
             echo '{"hosting":{"public":"."}}' > firebase.json
             firebase deploy --project download-smartmet --token "$FIREBASE_TOKEN"
-            rsync -av -e ssh . fmi@cumulus.meteo.fi:RPMS/
   prepare:
     machine: true
     steps:
-      - run: sudo npm install firebase-tools
-      - run: firebase deploy
       - run: mkdir -p RPMS
       - run: sudo chgrp -R 0 RPMS
       - run: sudo chmod -R g=u RPMS
@@ -127,10 +123,10 @@ workflows:
   version: 2
   build-smartmet-qdtools:
     jobs:
-      - deploytest
-      - prepare:
+      - prepare
+      - deployfirebase:
           requires:
-            - deploytest
+            - prepare
       - smartmet-library-newbase:
           requires:
             - prepare
