@@ -124,9 +124,6 @@ workflows:
   build-smartmet-qdtools:
     jobs:
       - prepare
-      - deployfirebase:
-          requires:
-            - prepare
       - smartmet-library-newbase:
           requires:
             - prepare
@@ -157,7 +154,7 @@ workflows:
             - smartmet-library-calculator
             - smartmet-library-gis
             - smartmet-library-spine
-      - deploy:
+      - deployfirebase:
           requires:
             - smartmet-qdtools
 
