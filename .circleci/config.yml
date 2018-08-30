@@ -13,7 +13,7 @@ jobs:
     machine: true
     steps:
       - run: mkdir -p RPMS
-      - run: chmod 2775
+      - run: chmod 2775 RPMS
       - run: chmod a+rwx RPMS
       - persist_to_workspace:
           root: RPMS
