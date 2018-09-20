@@ -7,7 +7,7 @@ aliases:
       sudo chgrp -R 0 RPMS
       sudo chmod -R g=u RPMS
       ls -lR
-      docker run -u rpmbuild:0 -e "RPM_BUILD_NCPUS=4" -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
+      docker run -u rpmbuild:0 -e "RPM_BUILD_NCPUS=2" -h rpmbuild-el7.fmi.fi -v $PWD/RPMS:/home/rpmbuild/rpmbuild/RPMS fmidev/rpmbuild:el7 https://github.com/fmidev/$CIRCLE_JOB.git
       ls -lR RPMS
 
 version: 2
@@ -100,28 +100,13 @@ jobs:
       - persist_to_workspace:
           root: RPMS
           paths: x86_64/smartmet-qdtools*
-  deploy:
-    machine: true
-    steps:
-      - attach_workspace:
-          at: RPMS
-      - run:
-          name: Install Firebase
-          command: sudo npm install firebase-tools
-      - run:
-          name: Copy files
-          command: scp -r RPMS/ fmi@cumulus.meteo.fi:RPMS/
-      - run:
-          name: Firebase Deploy
-          command: |
-            cd RPMS
-            echo '{"hosting":{"public":"."}}' > firebase.json
-            firebase deploy --project download-smartmet --token "$FIREBASE_TOKEN"
-
 
 workflows:
   version: 2
   build-smartmet-qdtools:
+    triggers:
+      - schedule:
+          cron: "0 0 * * *"
     jobs:
       - prepare
       - smartmet-library-newbase:
