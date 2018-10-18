@@ -92,6 +92,62 @@ jobs:
       - persist_to_workspace:
           root: RPMS
           paths: x86_64/smartmet-library-spine*
+  smartmet-library-locus:
+    machine: true
+    steps:
+      - attach_workspace: *attach_workspace
+      - run: *run
+      - persist_to_workspace:
+          root: RPMS
+          paths: x86_64/smartmet-library-locus*
+  smartmet-library-tron:
+    machine: true
+    steps:
+      - attach_workspace: *attach_workspace
+      - run: *run
+      - persist_to_workspace:
+          root: RPMS
+          paths: x86_64/smartmet-library-tron*
+  smartmet-engine-querydata:
+    machine: true
+    steps:
+      - attach_workspace: *attach_workspace
+      - run: *run
+      - persist_to_workspace:
+          root: RPMS
+          paths: x86_64/smartmet-engine-querydata*
+  smartmet-engine-sputnik:
+    machine: true
+    steps:
+      - attach_workspace: *attach_workspace
+      - run: *run
+      - persist_to_workspace:
+          root: RPMS
+          paths: x86_64/smartmet-engine-sputnik*
+  smartmet-engine-geonames:
+    machine: true
+    steps:
+      - attach_workspace: *attach_workspace
+      - run: *run
+      - persist_to_workspace:
+          root: RPMS
+          paths: x86_64/smartmet-engine-geonames*
+  smartmet-engine-gis:
+    machine: true
+    steps:
+      - attach_workspace: *attach_workspace
+      - run: *run
+      - persist_to_workspace:
+          root: RPMS
+          paths: x86_64/smartmet-engine-gis*
+  smartmet-engine-contour:
+    machine: true
+    steps:
+      - attach_workspace: *attach_workspace
+      - run: *run
+      - persist_to_workspace:
+          root: RPMS
+          paths: x86_64/smartmet-engine-contour*
   smartmet-qdtools:
     machine: true
     steps:
@@ -100,6 +156,14 @@ jobs:
       - persist_to_workspace:
           root: RPMS
           paths: x86_64/smartmet-qdtools*
+  smartmet-server:
+    machine: true
+    steps:
+      - attach_workspace: *attach_workspace
+      - run: *run
+      - persist_to_workspace:
+          root: RPMS
+          paths: x86_64/smartmet-server*
 
 workflows:
   version: 2
@@ -114,6 +178,9 @@ workflows:
     jobs:
       - prepare
       - smartmet-library-newbase:
+          requires:
+            - prepare
+      - smartmet-library-tron:
           requires:
             - prepare
       - smartmet-library-imagine:
@@ -134,6 +201,36 @@ workflows:
       - smartmet-library-spine:
           requires:
             - smartmet-library-gis
+      - smartmet-library-locus:
+          requires:
+            - smartmet-library-macgyver
+      - smartmet-engine-querydata:
+          requires:
+            - smartmet-library-newbase
+            - smartmet-library-macgyver
+            - smartmet-library-spine
+      - smartmet-engine-sputnik:
+          requires:
+            - smartmet-library-macgyver
+            - smartmet-library-spine
+      - smartmet-engine-geonames:
+          requires:
+            - smartmet-library-locus
+            - smartmet-library-macgyver
+            - smartmet-library-gis
+            - smartmet-library-spine
+      - smartmet-engine-gis:
+          requires:
+            - smartmet-library-newbase
+            - smartmet-library-gis
+            - smartmet-library-spine
+      - smartmet-engine-contour:
+          requires:
+            - smartmet-library-newbase
+            - smartmet-library-tron
+            - smartmet-library-macgyver
+            - smartmet-library-gis
+            - smartmet-library-spine
       - smartmet-qdtools:
           requires:
             - smartmet-library-newbase
@@ -143,7 +240,14 @@ workflows:
             - smartmet-library-calculator
             - smartmet-library-gis
             - smartmet-library-spine
+      - smartmet-server:
+          requires:
+            - smartmet-library-macgyver
+            - smartmet-library-spine
       - deployfirebase:
           requires:
             - smartmet-qdtools
+            - smartmet-server
+            - smartmet-engine-contour
+            - smartmet-engine-querydata
 
